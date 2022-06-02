@@ -7,63 +7,69 @@ using System.IO;
 
 namespace EscrituraArchivos
 {
-    class Cliente //Creacion de la clase Cliente
+    class Cinema
     {
-        //Atributos
-        string nombreCliente;
-        int numeroCliente;
-        string direccion;
-        long telefono;
+        public string pelicula;
+        public int tickets, ninos, adultos;
+        public float costoNino = 24;
+        public float costoAdulto = 36;
 
-        //Constructor
-        public Cliente(string nombreCliente, int numeroCliente, string direccion, long telefono)
+        public Cinema(string pelicula, int tickets, int ninos, int adultos)
         {
-            //recibe los parámetros con mismos nombres y los asigna a los campos de la clase con this.
-            this.nombreCliente = nombreCliente;
-            this.numeroCliente = numeroCliente;
-            this.direccion = direccion;
-            this.telefono = telefono;
+            this.pelicula = pelicula;
+            this.tickets = tickets;
+            this.ninos = ninos;
+            this.adultos = adultos;
         }
-        //Metodo funcion que calcula la venta
+
+        public float Total()
+        {
+            return (costoAdulto * adultos) + (costoNino * ninos);
+        }
+
+        public void Imprimir(float total)
+        {
+            Console.WriteLine("\n\tRECIBO");
+            Console.WriteLine("Pelicula:    {0}", pelicula);
+            Console.WriteLine("Tickets:     {0}", tickets);
+            Console.WriteLine("Adultos:     {0}" + " \t{1:C} ", adultos, (costoAdulto * adultos));
+            Console.WriteLine("Niños:       {0}" + " \t{1:C}", ninos, (costoNino * ninos));
+            Console.WriteLine("Total:         {0:C}", total);
+        }
     }
     class Program
     {
         static void Main(string[] args)
         {
-            //Declaracion de variables
-            string nombreCliente, direccion;
-            int numeroCliente;
-            long telefono;
+            string pelicula;
+            int tickets, ninos, adultos;
+            float total;
 
-            StreamWriter sw = new StreamWriter("ejemplo.txt",true);
-            //si el archivo no existe lo creará
-            //si ya existe, escribirá en él
-            //true es para agregar y no sobreescribir
+            StreamWriter sw = new StreamWriter("ejemplo.txt");
 
-            //Captura de datos
-            Console.Write("Ingrese su nombre:");
-            nombreCliente = Console.ReadLine();
-            Console.Write("Ingrese numero de cliente:");
-            numeroCliente = int.Parse(Console.ReadLine());
-            Console.Write("Ingrese su direccion:");
-            direccion = Console.ReadLine();
-            Console.Write("Ingrese su telefono:");
-            telefono = long.Parse(Console.ReadLine());
+            Console.Write("Que pelicula desea ver: ");
+            pelicula = Console.ReadLine();
+            Console.Write("Cuantos tickets desea: ");
+            tickets = int.Parse(Console.ReadLine());
+            Console.Write("Cuantos adultos son: ");
+            adultos = int.Parse(Console.ReadLine());
+            Console.Write("Cuantos niños son: ");
+            ninos = int.Parse(Console.ReadLine());
 
-            //Se crea el objeto de la clase cliente enviándole los datos como parámetros al constructor.
-            Cliente comprador = new Cliente(nombreCliente, numeroCliente, direccion, telefono);
+            Cinema cn = new Cinema(pelicula, tickets, ninos, adultos);
+            total = cn.Total();
+            cn.Imprimir(total);
 
-            //Escribe en el archivo
-            sw.WriteLine("Nombre del cliente:          {0}", nombreCliente);
-            sw.WriteLine("Numero del cliente:          {0}", numeroCliente);
-            sw.WriteLine("Direccion:                   {0}", direccion);
-            sw.WriteLine("Telefono:                    {0}", telefono);
+            //Escribiendo en el archivo
+            sw.WriteLine("\tRECIBO");
+            sw.WriteLine("Pelicula:    {0}", pelicula);
+            sw.WriteLine("Tickets:     {0}", tickets);
+            sw.WriteLine("Adultos:     {0}", adultos);
+            sw.WriteLine("Niños:       {0}", ninos);
+            sw.WriteLine("Total:       {0:C}", total);
 
-
-
-            sw.Close();//se debe cerrar el archivo
-
-            Console.WriteLine("Escribiendo en el archivo...");
+            sw.Close();
+            Console.WriteLine("\nEscribiendo en el archivo...");
             Console.ReadLine();
         }
     }
